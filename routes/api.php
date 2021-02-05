@@ -22,6 +22,8 @@ Route::prefix('minapp')->group(function (){
 
 Route::prefix('admin')->group(function (){
 
+    Route::post('upload/img', 'UploadImgController@uploadImg');//图片上传
+
     Route::group(['namespace' => 'Admin\Login'], function () {
 
         Route::post('login','LoginController@login');//登录
@@ -43,6 +45,26 @@ Route::prefix('admin')->group(function (){
         });
     });
 
+    Route::group(['namespace' => 'Admin\UserAgreement'], function () {
+
+        Route::group(['middleware' => 'auth:admin'], function () {   
+            
+            Route::resource('agreement', 'UserAgreementController');//用户协议
+                   
+        });
+    });
+
+    Route::group(['namespace' => 'Admin\Consult'], function () {
+
+        Route::group(['middleware' => 'auth:admin'], function () {   
+            
+            Route::resource('consult-type', 'ConsultTypeController');//参考类型
+
+            Route::resource('consult', 'ConsultController');//参考内容      
+        });
+    });
+
 });
+
 
 
