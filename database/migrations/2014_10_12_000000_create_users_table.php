@@ -17,10 +17,12 @@ class CreateUsersTable extends Migration
             $table->id();
             $table->string('name')->default('');
             $table->string('phone')->unique()->default('');
-            $table->string('email')->unique()->default('');
+            $table->string('email')->default('');
             $table->string('username')->unique();
             $table->string('password');
-            $table->string('branch')->default('')->comment('组织名称');
+            $table->tinyInteger('is_initiator')->default(1)->comment('1,不是团队创始人，2，是团队创建始人');
+            $table->string('team')->default('')->comment('组织名称');
+            $table->string('tab_color')->default('')->comment('标记颜色');
             $table->string('medical_allergy')->default('')->comment('医疗过敏');
             $table->string('linkman_one_name')->default('')->comment('联系人姓名');
             $table->string('linkman_one_phone')->default('')->comment('联系人电话');

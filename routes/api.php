@@ -6,13 +6,29 @@ use Illuminate\Support\Facades\Route;
 
 Route::prefix('minapp')->group(function (){
 
+    Route::group(['namespace' => 'Minapp\User'], function () {
 
-    Route::group(['namespace' => 'Minapp\Contact'], function () {
-
-        Route::post('store/contact', 'ContactUsController@store');//保存联系我们信息
+        Route::post('register', 'RegisterController@register');//用户注册
+        Route::post('login', 'LoginController@login');//用户登陆
         
         Route::group(['middleware' => 'auth:api'], function () {   
+            Route::post('update/user', 'UpdateUserController@update');//编辑资料
             
+        });
+    });
+
+    Route::group(['namespace' => 'Minapp\Contact'], function () {
+        Route::post('store/contact', 'ContactUsController@store');//保存联系我们信息
+    });
+
+    Route::group(['namespace' => 'Minapp\Consult'], function () {
+        Route::get('consult', 'ConsultController@consult');//参考列表
+    });
+
+    Route::group(['namespace' => 'Minapp\Pay'], function () {
+        
+        Route::group(['middleware' => 'auth:api'], function () {   
+            Route::post('pay/member', 'PayController@payMember');//
             
         });
     });

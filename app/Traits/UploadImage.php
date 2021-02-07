@@ -37,8 +37,9 @@ trait UploadImage
      */
     public function getNewFile($file)
     {
+        $imgName= $this->getUploadPath();
        //return  Image::make($file)->resize(env('THUMB_WIDTH'), env('THUMB_HEIGHT'))->save($this->getUploadPath());
-       Image::make($file)->save($this->getUploadPath());
-       return $this->getUploadPath();
+       Image::make($file)->save($imgName);
+       return $imgName;
     }
 }

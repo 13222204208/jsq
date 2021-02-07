@@ -13,9 +13,30 @@ class ConsultController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        try {
+            $all= $request->all(); 
+            $limit = $all['limit'];
+            $page = ($all['page'] -1)*$limit;
+            $title = false;
+            if($request->has('title')){
+                $title = $all['title'];
+            }
+            $item= Consult::when($title,function($query) use ($title){
+                return $query->where('title','like','%'.$title.'%');
+            })->with('consultType:id,title')->skip($page)->take($limit)->get();
+    
+            $total= Consult::when($title,function($query) use ($title){
+                return $query->where('title','like','%'.$title.'%');
+            })->count();
+    
+            $data['item'] = $item;
+            $data['total'] = $total;
+            return $this->success($data);
+        } catch (\Throwable $th) {
+            return $this->failed($th->getMessage());
+        }
     }
 
     /**
@@ -68,7 +89,12 @@ class ConsultController extends Controller
      */
     public function edit($id)
     {
-        //
+        try {
+            $data= Consult::find($id);
+            return $this->success($data);
+        } catch (\Throwable $th) {
+            return $this->failed($th->getMessage());
+        }
     }
 
     /**
@@ -80,7 +106,17 @@ class ConsultController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        try {
+            $consult= Consult::find($id);
+            $consult->consult_type_id  = $request->consult_type_id;
+            $consult->cover = $request->cover;
+            $consult->title = $request->title;
+            $consult->content = $request->content;
+            $consult->save();
+            return $this->success();
+        } catch (\Throwable $th) {
+            return $this->failed($th->getMessage());
+        }
     }
 
     /**
@@ -91,6 +127,11 @@ class ConsultController extends Controller
      */
     public function destroy($id)
     {
-        //
+        try {
+            Consult::destroy($id);
+            return $this->success();
+        } catch (\Throwable $th) {
+            return $this->failed($th->getMessage());
+        }
     }
 }
