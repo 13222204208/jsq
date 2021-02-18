@@ -28,7 +28,35 @@ Route::prefix('minapp')->group(function (){
     Route::group(['namespace' => 'Minapp\Pay'], function () {
         
         Route::group(['middleware' => 'auth:api'], function () {   
-            Route::post('pay/member', 'PayController@payMember');//
+            Route::post('pay/member', 'PayController@payMember');//开通会员
+            
+        });
+    });
+
+
+    Route::group(['namespace' => 'Minapp\Team'], function () {
+        
+        Route::get('team', 'TeamController@team');//团队列表
+
+        Route::group(['middleware' => 'auth:api'], function () {   
+            Route::post('join-team', 'TeamController@joinTeam');//申请加入团队
+            
+        });
+    });
+
+    Route::group(['namespace' => 'Minapp\Notice'], function () {
+        
+        Route::group(['middleware' => 'auth:api'], function () {   
+            Route::get('msg-notice', 'NoticeController@msgNotice');//获取消息通知
+            
+        });
+    });
+
+
+    Route::group(['namespace' => 'Minapp\Invite'], function () {
+        
+        Route::group(['middleware' => 'auth:api'], function () {   
+            Route::get('member-list', 'InviteMemberController@memberList');//获取邀请新成员列表
             
         });
     });

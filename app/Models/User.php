@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\Timestamp;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -10,7 +11,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable implements JWTSubject
 {
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, Timestamp;
 
     /**
      * 获取会储存到 jwt 声明中的标识

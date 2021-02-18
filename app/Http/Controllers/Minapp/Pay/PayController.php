@@ -15,7 +15,7 @@ class PayController extends Controller
             $user= auth('api')->user();
             
             $stop_time = Carbon::parse('+1 year')->toDateTimeString();
-            if(intval($request->duration)){
+            if(intval($request->duration) === 2){
                 $stop_time= Carbon::parse('+99 year')->toDateTimeString();
             }
 
