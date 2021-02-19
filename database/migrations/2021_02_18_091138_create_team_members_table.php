@@ -17,6 +17,7 @@ class CreateTeamMembersTable extends Migration
             $table->id();
             $table->tinyInteger('team_id')->comment('团队的id');
             $table->tinyInteger('user_id')->comment('成员用户的id');
+            $table->tinyInteger('is_initiator')->default(1)->comment('1,不是团队创始人，2，是团队创建始人');
             $table->tinyInteger('status')->default(1)->comment('团队成员状态，1正常，2禁用');
             $table->timestamps();
 

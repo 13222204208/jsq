@@ -10,6 +10,8 @@ class JoinTeamNotice extends Model
 {
     use HasFactory, Timestamp;
 
+    protected $guarded = [];
+
     public function applyUserInfo()
     {
         return $this->hasOne('App\Models\User','id','user_id');

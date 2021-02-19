@@ -23,14 +23,17 @@ class NoticeController extends Controller
             }
             $user= auth('api')->user(); 
             $teamInfo= Team::where('initiator_id',$user->id)->where('team_state',1)->first();
-            if($teamInfo){
-                $data= JoinTeamNotice::where('team_id',$teamInfo->id)->with(['applyUserInfo'=>function($query){
+            if($teamInfo){//如果是团队创始人则显示申请加入团队的消息
+                $data= JoinTeamNotice::where('team_id',$teamInfo->id)->where('status',0)->where('inviter_user_id',0)->with(['applyUserInfo'=>function($query){
                     $query->select('id', 'username', 'avatar'); // 需要同时查询关联外键的字段
-                }])->skip($page)->take($size)->get(['user_id','msg_content']);
+                }])->skip($page)->take($size)->get(['id','user_id','inviter_user_id','msg_content']);
                 
                 return $this->success($data);
             }
-            return $this->success();
+            $data= JoinTeamNotice::where('inviter_user_id',$user->id)->where('status',0)->with(['applyUserInfo'=>function($query){
+                $query->select('id', 'username', 'avatar'); // 需要同时查询关联外键的字段
+            }])->skip($page)->take($size)->get(['id','user_id','inviter_user_id','msg_content']);
+            return $this->success($data);
         } catch (\Throwable $th) {
             return $this->failed($th->getMessage());
         }

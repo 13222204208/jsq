@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Minapp\Invite;
 
 use App\Models\Team;
 use App\Models\User;
+use App\Models\TeamMember;
 use Illuminate\Http\Request;
+use App\Models\JoinTeamNotice;
 use App\Http\Controllers\Controller;
 
 class InviteMemberController extends Controller
@@ -31,6 +33,76 @@ class InviteMemberController extends Controller
             }
             $data= User::whereNotIn('id',$initiatorId)->skip($page)->take($size)->get(['id','username','avatar']);      
             return $this->success($data);
+        } catch (\Throwable $th) {
+            return $this->failed($th->getMessage());
+        }
+    }
+
+    public function inviteMember(Request $request)
+    {
+        try {
+            $memberId= $request->member_id;
+            if (empty($memberId)) {
+                return $this->failed('成员ID不能为空');
+            }
+            $user= auth('api')->user(); 
+            if ($user->is_initiator == 1) {
+                return $this->failed('你不是团队创始人');
+            }
+            $team= Team::where('initiator_id',$user->id)->where('status',1)->first();
+            if (!$team) {
+                return $this->failed('你不是团队创始人');
+            }
+            $mid = array_unique(explode(',',$memberId));//邀请的成员id
+            $userID = $user->id;//邀请人的id;
+            $msgContent= '邀请你加入'.$team->title;
+            $teamId= $team->id;
+
+            foreach ($mid as $value) {
+                JoinTeamNotice::create([
+                    'inviter_user_id' => intval($value),
+                    'team_id'=> $teamId,
+                    'msg_content' => $msgContent,
+                    'user_id' => $userID
+                ]);
+            }
+
+            return $this->success();
+
+        } catch (\Throwable $th) {
+            return $this->failed($th->getMessage());
+        }
+    }
+
+    public function consent(Request $request)
+    {
+        try {
+
+            $id = intval($request->id);
+            $state = intval($request->state);
+
+
+            $join= JoinTeamNotice::find($id);
+            $join->status = $state;
+            $join->save();
+
+            $inviter_user_id = intval($join->inviter_user_id);
+
+            if($state === 1){
+                if ($inviter_user_id != 0) {
+                    $userID= intval($inviter_user_id);
+                }else{
+                    $userID= $join->user_id;
+                }
+
+                $teamMember= new TeamMember;
+                $teamMember->team_id= $join->team_id;
+                $teamMember->user_id= $userID;
+                $teamMember->save();
+            }
+            return $this->success();
+
+
         } catch (\Throwable $th) {
             return $this->failed($th->getMessage());
         }

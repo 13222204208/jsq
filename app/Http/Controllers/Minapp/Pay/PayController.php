@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Minapp\Pay;
 
 use App\Models\Team;
+use App\Models\User;
+use App\Models\TeamMember;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use App\Http\Controllers\Controller;
@@ -25,6 +27,16 @@ class PayController extends Controller
             $team->duration = intval($request->duration);
             $team->stop_time = $stop_time;
             $team->save();
+
+            $user= User::find($user->id);
+            $user->is_initiator= 2;
+            $user->save();
+
+            $teamMember= new TeamMember();
+            $teamMember->user_id= $user->id;
+            $teamMember->team_id= $team->id;
+            $teamMember->is_initiator= 2;
+            $teamMember->save();
             return $this->success();
         } catch (\Throwable $th) {
             return $this->failed($th->getMessage());

@@ -40,7 +40,9 @@ Route::prefix('minapp')->group(function (){
 
         Route::group(['middleware' => 'auth:api'], function () {   
             Route::post('join-team', 'TeamController@joinTeam');//申请加入团队
-            
+            Route::get('my-team', 'TeamController@myTeam');//我的团队列表
+            Route::post('team-kick', 'TeamController@teamKick');//踢出成员
+
         });
     });
 
@@ -57,7 +59,18 @@ Route::prefix('minapp')->group(function (){
         
         Route::group(['middleware' => 'auth:api'], function () {   
             Route::get('member-list', 'InviteMemberController@memberList');//获取邀请新成员列表
-            
+            Route::post('invite-member', 'InviteMemberController@inviteMember');//邀请新成员
+            Route::post('consent', 'InviteMemberController@consent');//是否同意申请
+
+        });
+    });
+
+    Route::group(['namespace' => 'Minapp\Notepad'], function () {
+        
+        Route::group(['middleware' => 'auth:api'], function () {   
+            Route::get('notepad-list', 'NotepadController@notepadList');//获取邀请新成员列表
+            Route::post('store-notepad', 'NotepadController@storeNotepad');//添加记事本
+
         });
     });
 
@@ -105,6 +118,20 @@ Route::prefix('admin')->group(function (){
             Route::resource('consult-type', 'ConsultTypeController');//参考类型
 
             Route::resource('consult', 'ConsultController');//参考内容      
+        });
+    });
+
+    Route::group(['namespace' => 'Admin\Team'], function () {
+
+        Route::group(['middleware' => 'auth:admin'], function () {   
+            Route::resource('team', 'TeamController');//组织团队 
+        });
+    });
+
+    Route::group(['namespace' => 'Admin\Notepad'], function () {
+
+        Route::group(['middleware' => 'auth:admin'], function () {   
+            Route::resource('notepad', 'NotepadController');//记事本
         });
     });
 

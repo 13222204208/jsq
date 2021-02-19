@@ -9,4 +9,9 @@ use Illuminate\Database\Eloquent\Model;
 class Team extends Model
 {
     use HasFactory, Timestamp;
+
+    public function userInfo()
+    {
+        return $this->hasOne('App\Models\User','id','initiator_id');
+    }
 }
