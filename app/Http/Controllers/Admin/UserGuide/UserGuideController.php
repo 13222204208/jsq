@@ -1,31 +1,22 @@
 <?php
 
-namespace App\Http\Controllers\Admin\Notepad;
+namespace App\Http\Controllers\Admin\UserGuide;
 
-use App\Models\Notepad;
+use App\Models\UserGuide;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
-class NotepadController extends Controller
+class UserGuideController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index()
     {
         try {
-            $all= $request->all(); 
-            $limit = $all['limit'];
-            $page = ($all['page'] -1)*$limit;
-            
-            $item= Notepad::skip($page)->take($limit)->with(['userInfo'=>function($query){
-                $query->select('id', 'username'); // 需要同时查询关联外键的字段
-            }])->orderBy('created_at','desc')->get();
-            $total= Notepad::count();
-            $data['item'] = $item;
-            $data['total'] = $total;
+            $data= UserGuide::find(1);
             return $this->success($data);
         } catch (\Throwable $th) {
             return $this->failed($th->getMessage());
@@ -85,15 +76,12 @@ class NotepadController extends Controller
     public function update(Request $request, $id)
     {
         try {
-            if($request->status == 2){
-                $status= 1;
-            }else{
-                $status= 2;
-            }
-            Notepad::where('id',$id)->update([
-                'status'=>$status
-            ]);
+            $userGuide= UserGuide::find($id);
+            $userGuide->title= $request->title;
+            $userGuide->content= $request->content;
+            $userGuide->save();
             return $this->success();
+            
         } catch (\Throwable $th) {
             return $this->failed($th->getMessage());
         }
@@ -107,11 +95,6 @@ class NotepadController extends Controller
      */
     public function destroy($id)
     {
-        try {
-            Notepad::destroy($id);
-            return $this->success();
-        } catch (\Throwable $th) {
-            return $this->failed($th->getMessage());
-        }
+        //
     }
 }

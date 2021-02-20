@@ -74,6 +74,42 @@ Route::prefix('minapp')->group(function (){
         });
     });
 
+    Route::group(['namespace' => 'Minapp\Triage'], function () {
+        
+        Route::group(['middleware' => 'auth:api'], function () {   
+            
+            Route::post('store-triage', 'TriageController@storeTriage');//添加检伤分类
+
+        });
+    });
+
+    
+    Route::group(['namespace' => 'Minapp\UserGuide'], function () {
+        
+        Route::get('user-guide', 'UserGuideController@userGuide');//用户指南
+ 
+    });
+
+    Route::group(['namespace' => 'Minapp\Position'], function () {
+        
+        Route::group(['middleware' => 'auth:api'], function () {   
+            
+            Route::post('store-position', 'PositionController@storePosition');//设置位置
+
+        });
+ 
+    });
+
+    Route::group(['namespace' => 'Minapp\Tab'], function () {
+        
+        Route::group(['middleware' => 'auth:api'], function () {   
+            
+            Route::get('tab-type', 'TabController@tabType');//标记分类
+
+        });
+ 
+    });
+
 });
 
 
@@ -132,6 +168,27 @@ Route::prefix('admin')->group(function (){
 
         Route::group(['middleware' => 'auth:admin'], function () {   
             Route::resource('notepad', 'NotepadController');//记事本
+        });
+    });
+
+    Route::group(['namespace' => 'Admin\Triage'], function () {
+
+        Route::group(['middleware' => 'auth:admin'], function () {   
+            Route::resource('triage', 'TriageController');//检伤分类
+        });
+    });
+
+    Route::group(['namespace' => 'Admin\UserGuide'], function () {
+
+        Route::group(['middleware' => 'auth:admin'], function () {   
+            Route::resource('user-guide', 'UserGuideController');//用户指南
+        });
+    });
+
+    Route::group(['namespace' => 'Admin\Tab'], function () {
+
+        Route::group(['middleware' => 'auth:admin'], function () {   
+            Route::resource('tab', 'TabController');//标记
         });
     });
 

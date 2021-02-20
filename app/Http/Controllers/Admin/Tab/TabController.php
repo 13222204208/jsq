@@ -1,31 +1,23 @@
 <?php
 
-namespace App\Http\Controllers\Admin\Notepad;
+namespace App\Http\Controllers\Admin\Tab;
 
-use App\Models\Notepad;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Tab;
+use Illuminate\Http\Request;
 
-class NotepadController extends Controller
+class TabController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index()
     {
         try {
-            $all= $request->all(); 
-            $limit = $all['limit'];
-            $page = ($all['page'] -1)*$limit;
+            $data= Tab::get()->toTree();
             
-            $item= Notepad::skip($page)->take($limit)->with(['userInfo'=>function($query){
-                $query->select('id', 'username'); // 需要同时查询关联外键的字段
-            }])->orderBy('created_at','desc')->get();
-            $total= Notepad::count();
-            $data['item'] = $item;
-            $data['total'] = $total;
             return $this->success($data);
         } catch (\Throwable $th) {
             return $this->failed($th->getMessage());
@@ -50,7 +42,14 @@ class NotepadController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        try {
+            $data= array_filter($request->all());
+
+            Tab::create($data);
+            return $this->success();
+        } catch (\Throwable $th) {
+            return $this->failed($th->getMessage());
+        }
     }
 
     /**
@@ -72,7 +71,12 @@ class NotepadController extends Controller
      */
     public function edit($id)
     {
-        //
+        try {
+            $data= Tab::find($id);
+            return $this->success($data);
+        } catch (\Throwable $th) {
+            return $this->failed($th->getMessage());
+        }
     }
 
     /**
@@ -85,14 +89,13 @@ class NotepadController extends Controller
     public function update(Request $request, $id)
     {
         try {
-            if($request->status == 2){
-                $status= 1;
-            }else{
-                $status= 2;
-            }
-            Notepad::where('id',$id)->update([
-                'status'=>$status
-            ]);
+            $tab= Tab::find($id);
+            $tab->title= $request->title;
+      /*       if(intval($request->icon) == 0){
+                $tab->icon= $request->icon;
+            } */
+            $tab->icon= $request->icon;
+            $tab->save();
             return $this->success();
         } catch (\Throwable $th) {
             return $this->failed($th->getMessage());
@@ -108,8 +111,9 @@ class NotepadController extends Controller
     public function destroy($id)
     {
         try {
-            Notepad::destroy($id);
-            return $this->success();
+            $tab= Tab::find($id);
+            $tab->delete();
+            return $this->success();        
         } catch (\Throwable $th) {
             return $this->failed($th->getMessage());
         }
