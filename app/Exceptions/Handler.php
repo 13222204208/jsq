@@ -65,7 +65,7 @@ class Handler extends ExceptionHandler
             return response()->json(['msg' => '没有提供token，请登陆获取','code'=>-1]);
         }*/
         if (auth('api')->guest()) {
-            return response()->json(['msg' => '没有提供token，请登陆获取','code'=>-1]);
+            return response()->json(['msg' => 'token错误','code'=>-1]);
         }
         return parent::render($request, $exception);
     }

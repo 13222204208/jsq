@@ -22,6 +22,14 @@ class CreatePositionsTable extends Migration
             $table->unsignedBigInteger('user_id')->default(0)->comment('设置位置的用户id');
             $table->string('long')->comment('经度');
             $table->string('lat')->comment('纬度');
+
+            $table->string('enter_time')->default('')->comment('进入时间');
+            $table->string('evacuate_time')->default('')->comment('撤出时间');
+            $table->string('team_name')->default('')->comment('团队名称');
+            $table->string('hazard_type')->default('')->comment('危险类型');
+            $table->unsignedBigInteger('survivor')->default(0)->comment('生还者数量');
+            $table->unsignedBigInteger('victim')->default(0)->comment('遇难者数量');
+
             $table->tinyInteger('status')->default(1)->comment('1,正常，2禁用');
             $table->timestamps();
 

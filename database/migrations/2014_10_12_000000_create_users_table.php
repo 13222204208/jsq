@@ -29,6 +29,7 @@ class CreateUsersTable extends Migration
             $table->string('linkman_two_name')->default('')->comment('联系人姓名');
             $table->string('linkman_two_phone')->default('')->comment('联系人电话');
             $table->string('avatar')->default('https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif')->comment('头像');
+            $table->tinyInteger('status')->default(1)->comment('1,正常，2禁用');
             $table->timestamps();
         });
     }

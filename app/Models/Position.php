@@ -10,4 +10,9 @@ class Position extends Model
 {
     use HasFactory, Timestamp;
     protected $guarded = [];
+
+    public function userInfo()
+    {
+        return $this->hasOne('App\Models\User','id','user_id');
+    }
 }

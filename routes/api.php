@@ -95,7 +95,9 @@ Route::prefix('minapp')->group(function (){
         Route::group(['middleware' => 'auth:api'], function () {   
             
             Route::post('store-position', 'PositionController@storePosition');//设置位置
-
+            Route::post('position', 'PositionController@position');//更新或删除标记
+            Route::get('position-list', 'PositionController@positionList');//标记列表
+            Route::get('filter-position', 'PositionController@filterPosition');//筛选标记
         });
  
     });
@@ -189,6 +191,27 @@ Route::prefix('admin')->group(function (){
 
         Route::group(['middleware' => 'auth:admin'], function () {   
             Route::resource('tab', 'TabController');//标记
+        });
+    });
+
+    Route::group(['namespace' => 'Admin\Position'], function () {
+
+        Route::group(['middleware' => 'auth:admin'], function () {   
+            Route::resource('position', 'PositionController');//设置位置列表
+        });
+    });
+
+    Route::group(['namespace' => 'Admin\Admin'], function () {
+
+        Route::group(['middleware' => 'auth:admin'], function () {   
+            Route::resource('admin', 'AdminController');//后台帐号
+        });
+    });
+
+    Route::group(['namespace' => 'Admin\User'], function () {
+
+        Route::group(['middleware' => 'auth:admin'], function () {   
+            Route::resource('user', 'UserController');//app用户帐号
         });
     });
 

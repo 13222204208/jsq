@@ -36,9 +36,9 @@ class LoginController extends Controller
             return $this->failed($messages);
         }
 
-        $user= User::where('username',$data['username'])->first();
+        $user= User::where('username',$data['username'])->where('status',1)->first();
         if(!$user){
-            return $this->failed('用户不存在');
+            return $this->failed('用户不存在或被禁用');
         }else{
             if (!Hash::check($data['password'],$user->password)) {
                 return  $this->failed('密码不正确');
