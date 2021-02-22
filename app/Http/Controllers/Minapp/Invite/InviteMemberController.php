@@ -8,6 +8,7 @@ use App\Models\TeamMember;
 use Illuminate\Http\Request;
 use App\Models\JoinTeamNotice;
 use App\Http\Controllers\Controller;
+use App\Models\TeamNotice;
 
 class InviteMemberController extends Controller
 {
@@ -91,14 +92,24 @@ class InviteMemberController extends Controller
             if($state === 1){
                 if ($inviter_user_id != 0) {
                     $userID= intval($inviter_user_id);
+                    $joinUser= User::find($userID);
+                    $msg= $joinUser->username.'成功加入团队';
                 }else{
                     $userID= $join->user_id;
+                    $joinTeam= Team::find($join->team_id);
+                    $msg= '你已经成功加入'.$joinTeam->title;
                 }
 
                 $teamMember= new TeamMember;
                 $teamMember->team_id= $join->team_id;
                 $teamMember->user_id= $userID;
                 $teamMember->save();
+
+                $teamNotice= new TeamNotice();
+                $teamNotice->team_id= $join->team_id;
+                $teamNotice->user_id= $userID;
+                $teamNotice->content= $msg;
+                $teamNotice->save();
             }
             return $this->success();
 
