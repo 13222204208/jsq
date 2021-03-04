@@ -5,10 +5,11 @@ namespace App\Http\Controllers\Minapp\Invite;
 use App\Models\Team;
 use App\Models\User;
 use App\Models\TeamMember;
+use App\Models\TeamNotice;
+use App\Models\UserNotice;
 use Illuminate\Http\Request;
 use App\Models\JoinTeamNotice;
 use App\Http\Controllers\Controller;
-use App\Models\TeamNotice;
 
 class InviteMemberController extends Controller
 {
@@ -92,12 +93,10 @@ class InviteMemberController extends Controller
             if($state === 1){
                 if ($inviter_user_id != 0) {
                     $userID= intval($inviter_user_id);
-                    $joinUser= User::find($userID);
-                    $msg= $joinUser->username.'成功加入团队';
+
                 }else{
                     $userID= $join->user_id;
-                    $joinTeam= Team::find($join->team_id);
-                    $msg= '你已经成功加入'.$joinTeam->title;
+
                 }
 
                 $teamMember= new TeamMember;
@@ -105,11 +104,24 @@ class InviteMemberController extends Controller
                 $teamMember->user_id= $userID;
                 $teamMember->save();
 
+                $joinUser= User::find($userID);
+                $msg= $joinUser->username.'成功加入团队';
+     
                 $teamNotice= new TeamNotice();
                 $teamNotice->team_id= $join->team_id;
                 $teamNotice->user_id= $userID;
                 $teamNotice->content= $msg;
                 $teamNotice->save();
+
+                $joinTeam= Team::find($join->team_id);
+                $msg= '你已经成功加入'.$joinTeam->title;
+
+                $UserNotice= new UserNotice();
+                $UserNotice->team_id= $join->team_id;
+                $UserNotice->user_id= $userID;
+                $UserNotice->content= $msg;
+                $UserNotice->save();
+
             }
             return $this->success();
 

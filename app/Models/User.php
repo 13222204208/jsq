@@ -12,7 +12,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 class User extends Authenticatable implements JWTSubject
 {
     use HasFactory, Notifiable, Timestamp;
-
+    protected $hidden = ['password'];
     /**
      * 获取会储存到 jwt 声明中的标识
      * @return mixed

@@ -3,10 +3,11 @@
 namespace App\Http\Controllers\Minapp\Notice;
 
 use App\Models\Team;
+use App\Models\TeamNotice;
+use App\Models\UserNotice;
 use Illuminate\Http\Request;
 use App\Models\JoinTeamNotice;
 use App\Http\Controllers\Controller;
-use App\Models\TeamNotice;
 
 class NoticeController extends Controller
 {
@@ -29,14 +30,19 @@ class NoticeController extends Controller
                     $query->select('id', 'username', 'avatar'); // 需要同时查询关联外键的字段
                 }])->skip($page)->take($size)->get(['id','user_id','inviter_user_id','msg_content']);
                 
-                return $this->success($data);
+                $data2= TeamNotice::where('team_id',$teamInfo->id)->get(['id','content','created_at']);
+                $all['list1']= $data;
+                $all['list2']= $data2;
+                return $this->success($all);
             }
             $data= JoinTeamNotice::where('inviter_user_id',$user->id)->where('status',0)->with(['applyUserInfo'=>function($query){
                 $query->select('id', 'username', 'avatar'); // 需要同时查询关联外键的字段
             }])->skip($page)->take($size)->get(['id','user_id','inviter_user_id','msg_content']);
 
-            //$success= TeamNotice::where('user_id',$user->id)->get();
-            return $this->success($data);
+            $data2= UserNotice::where('user_id',$user->id)->get(['id','content','created_at']);
+            $all['list1']= $data;
+            $all['list2']= $data2;
+            return $this->success($all);
         } catch (\Throwable $th) {
             return $this->failed($th->getMessage());
         }

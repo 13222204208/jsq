@@ -5,10 +5,13 @@ namespace App\Http\Controllers\Minapp\User;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Traits\UploadImage;
 use Illuminate\Support\Facades\Validator;
 
 class UpdateUserController extends Controller
 {
+    use UploadImage;
+
     public function update(Request $request)
     { 
 
@@ -51,5 +54,12 @@ class UpdateUserController extends Controller
         } catch (\Throwable $th) {
             return $this->failed($th->getMessage());
         }
+    }
+
+    public function uploadImg(Request $request)
+    {   
+        $imgUrl= $this->getNewFile($request->file);
+        
+        return $this->success($imgUrl);
     }
 }

@@ -13,9 +13,9 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
- /*         \App\Models\ContactUs::factory(50)->create();
+         // \App\Models\ContactUs::factory(50)->create();
           $this->call([
             AdminSeeder::class
-        ]);   */
+        ]);   
     }
 }

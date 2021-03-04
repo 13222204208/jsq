@@ -54,4 +54,47 @@ class RegisterController extends Controller
             return $this->failed($th->getMessage());
         }
     }
+
+    public function forgotPassword(Request $request)
+    {
+        try {
+            $data = $request->all(); 
+            $validator = Validator::make(//验证数据字段
+                $data,
+                [
+                    'username' => 'required|regex:/^1[345789][0-9]{9}$/',
+                    'password' => 'required|min:6|max:30',
+                    'rpassword' => 'required|min:6|max:30',
+                ],
+                [
+                    'required' => ':attribute不能为空',
+                    'regex' => ':attribute格式不正确',
+                    'max' => ':attribute最长:max字符',
+                    'min' => ':attribute最小:min字符',
+                    'unique' => ':attribute已存在',
+                ],
+                [
+                    'username' => '用户名',
+                    'password' => '密码',
+                    'rpassword' => '确认密码',
+                ]        
+            );
+    
+            if ($validator->fails()) {
+                $messages = $validator->errors()->first();
+                return $this->failed($messages);
+            }
+
+            if($data['password'] !== $data['rpassword']){
+                return $this->failed('输入的密码不一致');
+            }
+
+            $user = User::where('username',$data['username'])->first();
+            $user->password= Hash::make($data['password']);
+            $user->save();
+            return $this->success();
+        } catch (\Throwable $th) {
+            return $this->failed($th->getMessage());
+        }
+    }
 }

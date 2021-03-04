@@ -48,8 +48,13 @@ class LoginController extends Controller
         if (! $token = auth('api')->attempt($data)) {
             return  $this->failed();
         }
-     
-        return $this->success($token);
+
+        $data= auth('api')->user();
+        $data->token= $token;
+        $data->tab_color="imgs/20210304/m6o5WFQYNs.jpg";
+        $data->avatar="imgs/20210205/5mfAG0ktHJ.jpg";
+        $data->name=$data->username;
+        return $this->success($data);
 
     }
 }

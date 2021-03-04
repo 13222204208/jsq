@@ -57,7 +57,7 @@ class ConsultController extends Controller
      */
     public function store(Request $request)
     {
-        try {
+        try { 
             $data = new Consult();
             $data->title = $request->title;
             $data->cover = $request->cover;

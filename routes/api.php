@@ -2,15 +2,20 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Support\Facades\RateLimiter;
 
 
 Route::prefix('minapp')->group(function (){
 
     Route::group(['namespace' => 'Minapp\User'], function () {
 
+
         Route::post('register', 'RegisterController@register');//用户注册
         Route::post('login', 'LoginController@login');//用户登陆
-        
+        Route::post('forgot-password', 'RegisterController@forgotPassword');//忘记密码
+        Route::post('upload-img', 'UpdateUserController@uploadImg');//头像上传
+
         Route::group(['middleware' => 'auth:api'], function () {   
             Route::post('update/user', 'UpdateUserController@update');//编辑资料
             
@@ -42,6 +47,8 @@ Route::prefix('minapp')->group(function (){
             Route::post('join-team', 'TeamController@joinTeam');//申请加入团队
             Route::get('my-team', 'TeamController@myTeam');//我的团队列表
             Route::post('team-kick', 'TeamController@teamKick');//踢出成员
+
+            Route::get('team-privacy', 'TeamPrivacyController@teamPrivacy');//团队隐私
 
         });
     });
@@ -163,6 +170,9 @@ Route::prefix('admin')->group(function (){
 
         Route::group(['middleware' => 'auth:admin'], function () {   
             Route::resource('team', 'TeamController');//组织团队 
+            
+            Route::resource('team-privacy', 'TeamPrivacyController');//开通会员页面团队隐私
+            
         });
     });
 
