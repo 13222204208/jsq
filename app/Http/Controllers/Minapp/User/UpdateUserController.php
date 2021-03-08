@@ -12,18 +12,18 @@ class UpdateUserController extends Controller
 {
     use UploadImage;
 
-    public function update(Request $request)
+    public function edit(Request $request)
     { 
 
         try {
-            $data = $request->all(); 
+            $data = $request->only('name','phone','email','team','tab_color','medical_allergy','linkman_one_name','linkman_one_phone','linkman_two_name','linkman_two_phone','avatar','token'); 
             $validator = Validator::make(//验证数据字段
                 $data,
                 [
-                    'phone' => 'required|unique:users|regex:/^1[345789][0-9]{9}$/',
+                    'phone' => 'required|regex:/^1[345789][0-9]{9}$/',
                     'name' => 'required|min:2|max:30',
-                    'email' => 'email',
-                    'team' => 'min:2|max:100',//团队
+                    //'email' => 'email',
+                   // 'team' => 'min:2|max:100',//团队
                     'token' =>'required'
                 ],
                 [
@@ -45,10 +45,9 @@ class UpdateUserController extends Controller
                 $messages = $validator->errors()->first();
                 return $this->failed($messages);
             }
-    
-            $user = auth('api')->user();
             unset($data['token']);
-            array_filter($data);
+            $user = auth('api')->user();
+            $data= array_filter($data);
             User::where('id',$user->id)->update($data);
             return $this->success();
         } catch (\Throwable $th) {

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Minapp\Tab;
 
 use App\Http\Controllers\Controller;
 use App\Models\Tab;
+use App\Models\TabColor;
 use Illuminate\Http\Request;
 
 class TabController extends Controller
@@ -17,6 +18,16 @@ class TabController extends Controller
             }
 
             $data= Tab::where('parent_id',null)->get(['id','title']);
+            return $this->success($data);
+        } catch (\Throwable $th) {
+            return $this->failed($th->getMessage());
+        }
+    }
+
+    public function tabColor()
+    {
+        try {
+            $data= TabColor::all();
             return $this->success($data);
         } catch (\Throwable $th) {
             return $this->failed($th->getMessage());

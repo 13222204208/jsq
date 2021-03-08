@@ -17,9 +17,15 @@ Route::prefix('minapp')->group(function (){
         Route::post('upload-img', 'UpdateUserController@uploadImg');//头像上传
 
         Route::group(['middleware' => 'auth:api'], function () {   
-            Route::post('update/user', 'UpdateUserController@update');//编辑资料
+            Route::post('edit/user', 'UpdateUserController@edit');//编辑资料
             
         });
+    });
+
+    Route::group(['namespace' => 'Minapp\UserAgreement'], function () {
+
+         Route::get('agreement', 'UserAgreementController@agreement');//用户协议
+            
     });
 
     Route::group(['namespace' => 'Minapp\Contact'], function () {
@@ -40,10 +46,9 @@ Route::prefix('minapp')->group(function (){
 
 
     Route::group(['namespace' => 'Minapp\Team'], function () {
-        
-        Route::get('team', 'TeamController@team');//团队列表
 
         Route::group(['middleware' => 'auth:api'], function () {   
+            Route::get('team', 'TeamController@team');//团队列表
             Route::post('join-team', 'TeamController@joinTeam');//申请加入团队
             Route::get('my-team', 'TeamController@myTeam');//我的团队列表
             Route::post('team-kick', 'TeamController@teamKick');//踢出成员
@@ -57,7 +62,7 @@ Route::prefix('minapp')->group(function (){
         
         Route::group(['middleware' => 'auth:api'], function () {   
             Route::get('msg-notice', 'NoticeController@msgNotice');//获取消息通知
-            
+            Route::get('notice-count', 'NoticeController@noticeCount');//获取消息通知数量
         });
     });
 
@@ -110,11 +115,11 @@ Route::prefix('minapp')->group(function (){
     });
 
     Route::group(['namespace' => 'Minapp\Tab'], function () {
-        
+        Route::get('tab-color', 'TabController@tabColor');//用户标记图片
         Route::group(['middleware' => 'auth:api'], function () {   
             
             Route::get('tab-type', 'TabController@tabType');//标记分类
-
+        
         });
  
     });
@@ -125,6 +130,7 @@ Route::prefix('minapp')->group(function (){
 Route::prefix('admin')->group(function (){
 
     Route::post('upload/img', 'UploadImgController@uploadImg');//图片上传
+    Route::post('upload/content/img', 'UploadImgController@uploadContentImg');//图片上传
 
     Route::group(['namespace' => 'Admin\Login'], function () {
 
@@ -152,6 +158,15 @@ Route::prefix('admin')->group(function (){
         Route::group(['middleware' => 'auth:admin'], function () {   
             
             Route::resource('agreement', 'UserAgreementController');//用户协议
+                   
+        });
+    });
+
+    Route::group(['namespace' => 'Admin\TabColor'], function () {
+
+        Route::group(['middleware' => 'auth:admin'], function () {   
+            
+            Route::resource('tab-color', 'TabColorController');//用户标记
                    
         });
     });

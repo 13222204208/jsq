@@ -16,6 +16,7 @@ class CreateUserGuidesTable extends Migration
         Schema::create('user_guides', function (Blueprint $table) {
             $table->id();
             $table->string('title')->default('用户指南')->comment('用户指南');
+            $table->string('url')->default('')->comment('用户指南');
             $table->text('content')->comment('用户指南详细内容');
             $table->timestamps();
 

@@ -20,6 +20,7 @@ class CreateTeamsTable extends Migration
             $table->tinyInteger('status')->default(1)->comment('1,正常，2禁用');
             $table->tinyInteger('duration')->default(1)->comment('1,包年，2终身');
             $table->string('stop_time')->default('')->comment('截止时间');
+            $table->string('cover')->default('imgs/team/team_icon.png')->comment('团队图标');
             $table->tinyInteger('team_state')->default(1)->comment('1,私有的，2公开的');
             $table->timestamps();
 

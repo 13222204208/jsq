@@ -20,7 +20,7 @@ class CreateJoinTeamNoticesTable extends Migration
             $table->tinyInteger('team_id')->comment('团队的id');
             $table->string('msg_content')->comment('消息内容');
             $table->tinyInteger('user_id')->comment('申请用户的id');
-
+            $table->tinyInteger('state')->default(0)->comment('0,未读， 1已读');
             $table->timestamps();
 
             $table->comment= "申请加入团队消息通知表";

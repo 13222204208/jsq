@@ -5,9 +5,11 @@ namespace App\Http\Controllers\Admin\UserGuide;
 use App\Models\UserGuide;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Traits\ImgUrl;
 
 class UserGuideController extends Controller
 {
+    use ImgUrl;
     /**
      * Display a listing of the resource.
      *
@@ -78,7 +80,8 @@ class UserGuideController extends Controller
         try {
             $userGuide= UserGuide::find($id);
             $userGuide->title= $request->title;
-            $userGuide->content= $request->content;
+            $userGuide->content= $this->delImgUrl($request->content);
+            $userGuide->url= $request->url;
             $userGuide->save();
             return $this->success();
             

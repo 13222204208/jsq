@@ -95,6 +95,12 @@ class PositionController extends Controller
                     ['long' ,'<',$right_bottom_lng],
                     ['status',1]
                 ]; 
+
+                if($request->type == "own"){
+                    $user= auth('api')->user();
+                    $data= Position::where('user_id',$user->id)->where($map)->where('status',1)->get();
+                    return $this->success($data);
+                }
                 //$data= Position::where($map)->skip($page)->take($size)->get();     
                 $data= Position::where($map)->get(); 
                 return $this->success($data);

@@ -11,7 +11,7 @@ class TeamPrivacyController extends Controller
     public function teamPrivacy()
     {
         try {
-            $data= TeamPrivacy::first();
+            $data= TeamPrivacy::all();
             return $this->success($data);
         } catch (\Throwable $th) {
             return $this->failed($th->getMessage());

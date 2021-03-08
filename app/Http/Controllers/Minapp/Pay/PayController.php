@@ -8,6 +8,7 @@ use App\Models\TeamMember;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use App\Http\Controllers\Controller;
+use Yansongda\LaravelPay\Facades\Pay;
 
 class PayController extends Controller
 {
@@ -15,6 +16,14 @@ class PayController extends Controller
     {
         try {
             $user= auth('api')->user();
+            $order = [
+                'out_trade_no' => time(),
+                'total_amount' => 12,
+                'subject' => 'test subject - 测试',
+            ];
+            
+            //return Pay::alipay()->app($order);
+           
             
             $stop_time = Carbon::parse('+1 year')->toDateTimeString();
             if(intval($request->duration) === 2){

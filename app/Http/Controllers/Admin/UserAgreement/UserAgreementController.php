@@ -16,7 +16,7 @@ class UserAgreementController extends Controller
     public function index()
     {
         try {
-            $data= UserAgreement::all();     
+            $data= UserAgreement::where('id',1)->get();     
             return $this->success($data);
         } catch (\Throwable $th) {
             return $this->failed($th->getMessage());

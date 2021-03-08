@@ -26,8 +26,13 @@ class InviteMemberController extends Controller
             if($request->page){
                 $page = ($request->page -1)*$size;
             }
-            $initiatorId= Team::pluck('initiator_id');
-
+            $initiatorId= Team::pluck('initiator_id')->toArray();  
+            $user= auth('api')->user();
+            $team= Team::where('initiator_id',$user->id)->first();
+            $teamMemberID= TeamMember::where('team_id',$team->id)->pluck('user_id')->toArray();
+            
+            $initiatorId= array_merge($initiatorId,$teamMemberID);
+     
             if($request->userName){
                 $username= $request->userName; 
                 $data= User::whereNotIn('id',$initiatorId)->where('username','like','%'.$username.'%')->skip($page)->take($size)->get(['id','username','avatar']);      
@@ -59,6 +64,12 @@ class InviteMemberController extends Controller
             $userID = $user->id;//邀请人的id;
             $msgContent= '邀请你加入'.$team->title;
             $teamId= $team->id;
+
+            $state= JoinTeamNotice::where('team_id',$team->id)->whereIn('inviter_user_id',$mid)->get();
+
+            if(count($state) != 0){
+                return $this->failed($state);
+            }
 
             foreach ($mid as $value) {
                 JoinTeamNotice::create([

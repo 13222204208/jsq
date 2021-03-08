@@ -13,10 +13,17 @@ class TeamPrivacyController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         try {
-            $data= TeamPrivacy::find(1);
+            $all= $request->all(); 
+            $limit = $all['limit'];
+            $page = ($all['page'] -1)*$limit;
+            
+            $item= TeamPrivacy::skip($page)->take($limit)->orderBy('created_at','desc')->get();
+            $total= TeamPrivacy::count();
+            $data['item'] = $item;
+            $data['total'] = $total;
             return $this->success($data);
         } catch (\Throwable $th) {
             return $this->failed($th->getMessage());
@@ -41,7 +48,13 @@ class TeamPrivacyController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        try {
+            $data= $request->only('title','content','background');
+            TeamPrivacy::create($data);
+            return $this->success();
+        } catch (\Throwable $th) {
+            return $this->failed();
+        }
     }
 
     /**
@@ -63,7 +76,12 @@ class TeamPrivacyController extends Controller
      */
     public function edit($id)
     {
-        //
+        try {
+            $data= TeamPrivacy::find($id);
+            return $this->success($data);
+        } catch (\Throwable $th) {
+            return $this->failed($th->getMessage());
+        }
     }
 
     /**
@@ -77,6 +95,10 @@ class TeamPrivacyController extends Controller
     {
         try {
             $teamPrivacy= TeamPrivacy::find($id);
+            if(empty($teamPrivacy)){
+                TeamPrivacy::create($request->all());
+                return $this->success();
+            }
             $teamPrivacy->title= $request->title;
             $teamPrivacy->background= $request->background;
             $teamPrivacy->content= $request->content;
@@ -96,6 +118,11 @@ class TeamPrivacyController extends Controller
      */
     public function destroy($id)
     {
-        //
+        try {
+            TeamPrivacy::destroy($id);
+            return $this->success();
+        } catch (\Throwable $th) {
+            return $this->failed($th->getMessage());
+        }
     }
 }

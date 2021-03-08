@@ -60,7 +60,7 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Throwable $e)
     {
-        if ($e instanceof HttpResponseException) {
+/*         if ($e instanceof HttpResponseException) {
             return $e->getResponse();
         } elseif ($e instanceof ModelNotFoundException) {
             $e = new NotFoundHttpException($e->getMessage(), $e);
@@ -70,17 +70,17 @@ class Handler extends ExceptionHandler
             $e = new HttpException(403, $e->getMessage());
         } elseif ($e instanceof ValidationException && $e->getResponse()) {
             return $e->getResponse();
-        }
-
-        if ($this->isHttpException($e)) {
-            //return $this->toIlluminateResponse($this->renderHttpException($e), $e);
-            return response()->json(['msg' => '请求地址错误','code'=>0]);
-        } else {
-            return $this->toIlluminateResponse($this->convertExceptionToResponse($e), $e);
-        }
+        } */
+    
         if (auth('api')->guest()) {
             return response()->json(['msg' => '请登陆重试','code'=>-1]);
         }
+
+        
+        if ($this->isHttpException($e)) {
+            return $this->toIlluminateResponse($this->renderHttpException($e), $e);
+            return response()->json(['msg' => '请求地址错误','code'=>0]);
+        } 
         return parent::render($request, $e);
     }
 }

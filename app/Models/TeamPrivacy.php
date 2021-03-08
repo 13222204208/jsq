@@ -9,4 +9,6 @@ use Illuminate\Database\Eloquent\Model;
 class TeamPrivacy extends Model
 {
     use HasFactory, Timestamp;
+
+    protected $guarded = [];
 }

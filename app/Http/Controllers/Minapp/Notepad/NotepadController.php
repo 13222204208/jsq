@@ -32,6 +32,14 @@ class NotepadController extends Controller
                 $messages = $validator->errors()->first();
                 return $this->failed($messages);
             }
+
+            if(intval($request->id) != 0){
+                Notepad::where('id',intval($request->id))->update([
+                    'content'=> $request->content
+                ]);
+                return $this->success();
+            }
+
             $user= auth('api')->user(); 
             $notepad= new Notepad;
             if ($request->title) {
@@ -67,7 +75,7 @@ class NotepadController extends Controller
             }
             $user= auth('api')->user(); 
 
-            $data= Notepad::where('user_id',$user->id)->skip($page)->take($size)->get(['id','title','created_at']);
+            $data= Notepad::where('user_id',$user->id)->skip($page)->take($size)->get();
             return $this->success($data);
         } catch (\Throwable $th) {
             return $this->failed($th->getMessage());

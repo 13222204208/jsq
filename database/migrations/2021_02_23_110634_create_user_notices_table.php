@@ -18,6 +18,7 @@ class CreateUserNoticesTable extends Migration
             $table->tinyInteger('team_id')->comment('团队的id');
             $table->tinyInteger('user_id')->comment('成功加入用户的id');
             $table->string('content')->comment('消息的内容');
+            $table->tinyInteger('state')->default(0)->comment('0,未读， 1已读');
             $table->timestamps();
 
             $table->comment="成功加入团队通知表 用户接收的消息";

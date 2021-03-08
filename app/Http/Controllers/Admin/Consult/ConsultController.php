@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers\Admin\Consult;
 
+use App\Traits\ImgUrl;
 use App\Models\Consult;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
 class ConsultController extends Controller
 {
+    use ImgUrl;
     /**
      * Display a listing of the resource.
      *
@@ -62,7 +64,7 @@ class ConsultController extends Controller
             $data->title = $request->title;
             $data->cover = $request->cover;
             $data->consult_type_id = $request->consult_type_id;
-            $data->content = $request->content;
+            $data->content = $this->delImgUrl($request->content);
             $data->save();
             return $this->success();
         } catch (\Throwable $th) {
@@ -111,7 +113,7 @@ class ConsultController extends Controller
             $consult->consult_type_id  = $request->consult_type_id;
             $consult->cover = $request->cover;
             $consult->title = $request->title;
-            $consult->content = $request->content;
+            $consult->content =  $this->delImgUrl($request->content);
             $consult->save();
             return $this->success();
         } catch (\Throwable $th) {

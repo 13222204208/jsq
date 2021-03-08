@@ -51,9 +51,18 @@ class LoginController extends Controller
 
         $data= auth('api')->user();
         $data->token= $token;
-        $data->tab_color="imgs/20210304/m6o5WFQYNs.jpg";
-        $data->avatar="imgs/20210205/5mfAG0ktHJ.jpg";
-        $data->name=$data->username;
+        if(empty($data->tab_color)){
+            $data->tab_color="imgs/20210304/m6o5WFQYNs.jpg";
+        }
+
+        if(empty($data->avatar)){
+            $data->avatar="imgs/20210205/5mfAG0ktHJ.jpg";
+        }
+
+        if(empty($data->name)){
+            $data->name= $data->username;
+        }
+
         return $this->success($data);
 
     }
