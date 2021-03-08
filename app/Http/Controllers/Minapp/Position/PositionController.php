@@ -18,8 +18,8 @@ class PositionController extends Controller
                 [
                     'type_name' => 'required|min:1|max:50',
                     'icon' => 'required|min:1|max:200',
-                    'long' => 'required|min:1|max:200',
-                    'lat' => 'required|min:1|max:200',
+                    'longitude' => 'required|min:1|max:200',
+                    'latitude' => 'required|min:1|max:200',
                 ],
                 [
                     'required' => ':attribute不能为空',
@@ -30,11 +30,11 @@ class PositionController extends Controller
                 [
                     'type_name' => '类型名称',
                     'icon' => '图标',
-                    'long' => '经度',
-                    'lat' => '纬图',
+                    'longitude' => '经度',
+                    'latitude' => '纬图',
                 ]        
             );
-            $position= $this->getCity($data['long'],$data['lat']);
+            $position= $this->getCity($data['longitude'],$data['latitude']);
             
             if ($validator->fails()) {
                 $messages = $validator->errors()->first();
@@ -79,26 +79,26 @@ class PositionController extends Controller
                 return $this->success($data);
             }
 
-            if($request->long&&$request->lat){ 
+            if($request->longitude&&$request->latitude){ 
                     //使用此函数计算得到结果后，带入sql查询。
-                $point = $this->returnSquarePoint($request->long,$request->lat,30);//计算经纬度的周围某段距离的正方形的四个点
-                
+                $point = $this->returnSquarePoint($request->longitude,$request->latitude,30);//计算经纬度的周围某段距离的正方形的四个点
+              
                 $right_bottom_lat = $point['right_bottom']['lat'];   //右下纬度
                 $left_top_lat = $point['left_top']['lat'];           //左上纬度
                 $left_top_lng = $point['left_top']['lng'];           //左上经度
                 $right_bottom_lng = $point['right_bottom']['lng'];   //右下经度
                 $map = array();
                 $map = [
-                    ['lat' ,'>',$right_bottom_lat],
-                    ['lat' ,'<',$left_top_lat],
-                    ['long' ,'>',$left_top_lng],
-                    ['long' ,'<',$right_bottom_lng],
+                    ['latitude' ,'>',$right_bottom_lat],
+                    ['latitude' ,'<',$left_top_lat],
+                    ['longitude' ,'>',$left_top_lng],
+                    ['longitude' ,'<',$right_bottom_lng],
                     ['status',1]
                 ]; 
-
+                //return $this->success($map);
                 if($request->type == "own"){
                     $user= auth('api')->user();
-                    $data= Position::where('user_id',$user->id)->where($map)->where('status',1)->get();
+                    $data= Position::where('user_id',$user->id)->where($map)->get();
                     return $this->success($data);
                 }
                 //$data= Position::where($map)->skip($page)->take($size)->get();     

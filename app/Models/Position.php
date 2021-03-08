@@ -15,4 +15,14 @@ class Position extends Model
     {
         return $this->hasOne('App\Models\User','id','user_id');
     }
+
+    public function getLatitudeAttribute($value)
+    {
+        return (double)$value;
+    }
+
+    public function getLongitudeAttribute($value)
+    {
+        return (double)$value;
+    }
 }

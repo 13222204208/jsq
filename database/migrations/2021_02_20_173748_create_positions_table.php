@@ -16,12 +16,12 @@ class CreatePositionsTable extends Migration
         Schema::create('positions', function (Blueprint $table) {
             $table->id();
             $table->string('type_name')->comment('类型名称');
-            $table->string('icon')->default('')->comment('图标');
+            $table->string('iconPath')->default('')->comment('图标');
             $table->string('comment')->default('')->comment('备注');
             $table->string('address')->default('')->comment('地址');
             $table->unsignedBigInteger('user_id')->default(0)->comment('设置位置的用户id');
-            $table->string('long')->comment('经度');
-            $table->string('lat')->comment('纬度');
+            $table->string('longitude')->comment('经度');
+            $table->string('latitude')->comment('纬度');
 
             $table->string('enter_time')->default('')->comment('进入时间');
             $table->string('evacuate_time')->default('')->comment('撤出时间');
