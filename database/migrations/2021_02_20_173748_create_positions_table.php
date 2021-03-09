@@ -27,6 +27,7 @@ class CreatePositionsTable extends Migration
             $table->string('evacuate_time')->default('')->comment('撤出时间');
             $table->string('team_name')->default('')->comment('团队名称');
             $table->string('hazard_type')->default('')->comment('危险类型');
+            $table->tinyInteger('search_state')->default(0)->comment('1未搜索，2正在搜索，3搜索完成');
             $table->unsignedBigInteger('survivor')->default(0)->comment('生还者数量');
             $table->unsignedBigInteger('victim')->default(0)->comment('遇难者数量');
 

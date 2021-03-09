@@ -17,7 +17,7 @@ class PositionController extends Controller
                 $data,
                 [
                     'type_name' => 'required|min:1|max:50',
-                    'icon' => 'required|min:1|max:200',
+                    'iconPath' => 'required|min:1|max:200',
                     'longitude' => 'required|min:1|max:200',
                     'latitude' => 'required|min:1|max:200',
                 ],
@@ -29,7 +29,7 @@ class PositionController extends Controller
                 ],
                 [
                     'type_name' => '类型名称',
-                    'icon' => '图标',
+                    'iconPath' => '图标',
                     'longitude' => '经度',
                     'latitude' => '纬图',
                 ]        

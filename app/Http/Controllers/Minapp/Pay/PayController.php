@@ -16,6 +16,12 @@ class PayController extends Controller
     {
         try {
             $user= auth('api')->user();
+
+            $state= TeamMember::where('user_id',$user->id)->first();
+            if($state != null){
+                return $this->failed('你已创建或加入团队');
+            }
+
             $order = [
                 'out_trade_no' => time(),
                 'total_amount' => 12,

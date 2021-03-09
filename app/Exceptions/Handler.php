@@ -78,7 +78,7 @@ class Handler extends ExceptionHandler
 
         
         if ($this->isHttpException($e)) {
-            return $this->toIlluminateResponse($this->renderHttpException($e), $e);
+            //return $this->toIlluminateResponse($this->renderHttpException($e), $e);
             return response()->json(['msg' => '请求地址错误','code'=>0]);
         } 
         return parent::render($request, $e);
